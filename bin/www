@@ -23,19 +23,19 @@ const server = http.createServer(app);
 /**
  * Create HTTPs server.
  */
-/*const privateKey = fs.readFileSync('/project/API/ssl/fyang.fun.key', 'utf8');
+const privateKey = fs.readFileSync('/project/API/ssl/fyang.fun.key', 'utf8');
 const certificate = fs.readFileSync('/project/API/ssl/fyang.fun_bundle.crt', 'utf8');
 const credentials = {
   key: privateKey,
   cert: certificate
 };
-const httpsServer = https.createServer(credentials, app)*/
+const httpsServer = https.createServer(credentials, app)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port);
-// httpsServer.listen(443);
+httpsServer.listen(81);
 server.on('error', onError);
 server.on('listening', onListening);
 
