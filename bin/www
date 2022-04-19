@@ -5,7 +5,9 @@
  */
 const app = require('../app');
 const debug = require('debug')('api:server');
-var http = require('http');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
@@ -18,11 +20,22 @@ app.set('port', port);
  */
 const server = http.createServer(app);
 
+const privateKey = fs.readFileSync('ssl/fyang.fun.key', 'utf8');
+const certificate = fs.readFileSync('ssl/fyang.fun_bundle.crt', 'utf8');
+const credentials = {
+  key: privateKey,
+  cert: certificate
+};
+/**
+ * Create HTTPs server.
+ */
+const httpsServer = https.createServer(credentials, app)
+
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
+httpsServer.listen(443);
 server.on('error', onError);
 server.on('listening', onListening);
 
