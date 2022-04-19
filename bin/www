@@ -20,8 +20,8 @@ app.set('port', port);
  */
 const server = http.createServer(app);
 
-const privateKey = fs.readFileSync('ssl/fyang.fun.key', 'utf8');
-const certificate = fs.readFileSync('ssl/fyang.fun_bundle.crt', 'utf8');
+const privateKey = fs.readFileSync('./ssl/fyang.fun.key', 'utf8');
+const certificate = fs.readFileSync('./ssl/fyang.fun_bundle.crt', 'utf8');
 const credentials = {
   key: privateKey,
   cert: certificate
