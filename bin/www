@@ -29,14 +29,14 @@ const credentials = {
   key: privateKey,
   cert: certificate
 };
-const httpsServer = https.createServer(credentials, app)
+const server = https.createServer(credentials, app)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-httpsServer.listen(port);
-httpsServer.on('error', onError);
-httpsServer.on('listening', onListening);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /*
 *  跨域
