@@ -1,13 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const path = new Map()
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('logined');
-});
+const login = (req, res) => {
+    res.send('login')
+}
 
-router.get('/a', function(req, res, next) {
-    res.send('login-a');
-});
-
-module.exports = router;
+path.set('login', login)
+module.exports.path = path
