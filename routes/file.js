@@ -1,13 +1,8 @@
-const compress = require(  '../utils/compression');
+const express = require('express')
+const router = express.Router()
 
-const path = new Map()
+/* GET home page. */
+router.get('/', (req, res) => res.send('file home!'))
+router.get('/info', (req, res) => res.send('file-info'))
 
-// 图片压缩
-// compress({ quality: 50, name: 'guohuimian.jpg' })
-
-const upload = (req, res) => {
-    res.send('upload')
-}
-
-path.set('upload', upload)
-module.exports.path = path
+module.exports = router

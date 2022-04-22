@@ -1,8 +1,10 @@
-const path = new Map()
+const express = require('express')
+const router = express.Router()
 
-const login = (req, res) => {
-    res.send('login')
-}
+/* GET home page. */
+router.get('/', (req, res) => res.send('login home!'))
+router.get('/info', (req, res) => res.send('login-info'))
 
-path.set('login', login)
-module.exports.path = path
+// interface
+
+module.exports = router

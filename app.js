@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 
 const indexRoute = require('./routes/index')
+const loginRoute = require('./routes/login')
+const userRoute = require('./routes/user')
+const fileRoute = require('./routes/file')
 
 // until
 const app = express()
@@ -17,6 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // router
 app.use('/', indexRoute)
+app.use('/login', loginRoute)
+app.use('/user', userRoute)
+app.use('/file', fileRoute)
 
 // 跨域
 app.all('*', function (req, res, next) {

@@ -1,8 +1,8 @@
-const path = new Map()
+const express = require('express')
+const router = express.Router()
 
-const user = (req, res) => {
-    res.send('user')
-}
+/* GET home page. */
+router.get('/', (req, res) => res.send('user home!'))
+router.get('/info', (req, res) => res.send('user-info!'))
 
-path.set('user', user)
-module.exports.path = path
+module.exports = router
