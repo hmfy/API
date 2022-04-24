@@ -16,13 +16,6 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-
-// router
-app.use('/', indexRoute)
-app.use('/login', loginRoute)
-app.use('/user', userRoute)
-app.use('/file', fileRoute)
 
 // 跨域
 app.all('*', function (req, res, next) {
@@ -32,6 +25,12 @@ app.all('*', function (req, res, next) {
   res.header("Cache-Control", "no-store")//304
   next()
 });
+
+// router
+app.use('/', indexRoute)
+app.use('/login', loginRoute)
+app.use('/user', userRoute)
+app.use('/file', fileRoute)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -46,7 +45,11 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.send(err)
+  console.log(err)
+  res.send({
+    code: err.code,
+    status: err.status
+  })
 })
 
 module.exports = app
