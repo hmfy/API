@@ -108,3 +108,7 @@ dist
 
 # ssl directories
 ssl
+
+# databaseconfig
+config/config.js
+

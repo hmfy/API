@@ -15,10 +15,8 @@ const uploadConfig = multer({
 
 /* GET home page. */
 router.get('/', (req, res) => res.send('file home!'))
-router.post('/upload', (req, res) => {
-	debugger
-})
-router.post('/zip', uploadConfig.array('photos', 6), (req, res) => {
+router.post('/upload', (req, res) => { res.send('upload') })
+router.post('/zip2', uploadConfig.array('photos', 6), (req, res) => {
 	const needSize = req.body['compressVal'] || 400 * 1024
 	req.files.forEach(({ filename, size, path } ) => {
 		if (needSize > size) return // 不需要压缩
@@ -35,7 +33,7 @@ router.post('/zip', uploadConfig.array('photos', 6), (req, res) => {
 	})
 	res.send(req.files)
 })
-router.get('/download', ({ query }, res) => {
+router.get('/download2', ({ query }, res) => {
 	const { type = 'origin', path: filePath } =  query
 	let downloadPath = ''
 	if (!filePath) {
