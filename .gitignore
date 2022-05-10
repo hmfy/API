@@ -112,3 +112,5 @@ ssl
 # databaseconfig
 config/config.js
 
+# files static
+files
