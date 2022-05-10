@@ -1,10 +1,12 @@
 module.exports = {
-	async add(knex, {title, content, createTime, address, type, tags}) {
+	async add(knex, {title, content, createTime, address, type, tags, USER_ADDRESS, USER_LNG, USER_LAT}) {
 		await knex('Article').insert({
 			Title: title,
 			Content: content,
 			CreateTime: createTime,
-			Address: address,
+			Address: USER_ADDRESS,
+			lng: USER_LNG,
+			lat: USER_LAT,
 			Type: type,
 			Tag: tags,
 			Creator: 1,
@@ -49,8 +51,9 @@ module.exports = {
 			content: 'content',
 			createTime: 'createTime',
 			address: 'address',
-			type: 'type'
-		}).from('Article').where('ID', ID)
+			type: 'type',
+			see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
+		}).from('Article as at').where('ID', ID)
 		const [ prevRes, curRes, nextRes ] = await Promise.all([prevInfo, curInfo, nextInfo])
 		return curRes.map(ele => {
 			const { title: prevTitle = '', ID: prevID = 0 } = prevRes.length ? prevRes[0] : []

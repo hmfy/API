@@ -3,13 +3,13 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const {expressjwt} = require('express-jwt')
-const {getDecrypt} = require('./utils/verify')
-const {token} = require('./config/config')
 
+const {token} = require('./config/config')
 const indexRoute = require('./routes/index')
 const loginRoute = require('./routes/login')
 const userRoute = require('./routes/user')
 const fileRoute = require('./routes/file')
+const {getAddress} = require("./utils/address");
 
 // until
 const app = express()
@@ -20,13 +20,23 @@ app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
 
 // 跨域
-app.all('*', function (req, res, next) {
+app.all('*', async (req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*")
 	res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization")
 	res.header("Access-Control-Allow-Methods", "*")
 	res.header("Cache-Control", "no-store")//304
 	next()
 });
+
+app.all('*', async (req, res, next) => {
+	// 获取ip和地址
+	const {lng, lat, address, ip} = await getAddress(req)
+	req.USER_LNG = lng
+	req.USER_LAT = lat
+	req.USER_ADDRESS = address
+	req.USER_IP = ip
+	next()
+})
 
 app.use(expressjwt({
 	secret: token.signKey,
@@ -47,7 +57,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use(function (err, req, res) {
 	// set locals, only providing error in development
 	res.locals.message = err.message
 	res.locals.error = req.app.get('env') === 'development' ? err : {}

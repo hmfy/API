@@ -13,7 +13,7 @@ async function execute({ path: filepath = '', ...args }) {
 			if (args.url.includes('/pageQuery')) {
 				const mustPrams = ['pageSize', 'pageNo']
 				for (let item of mustPrams) {
-					if (!args[item]) return parseResult({ error: `缺少必填参数${item}` }, args)
+					if (!args[item]) return parseResult({ error: `缺少必填参数${item}` })
 				}
 			}
 
