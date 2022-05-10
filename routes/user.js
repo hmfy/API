@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
 	}
 	// 密码错误
 	res.send({
-		err: '密码或密码有误！'
+		err: '账号或密码有误！'
 	})
 })
 
