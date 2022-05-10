@@ -15,7 +15,7 @@ module.exports = {
 			id: 'ID',
 			content: 'content',
 			createTime: 'createTime',
-			author: USER_ADDRESS
+			author: "address"
 		}).from('Comment').orderBy('ID', 'desc')
 		return {
 			total: total,
