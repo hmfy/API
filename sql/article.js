@@ -74,10 +74,16 @@ module.exports = {
 		}).from('Article').where('type', 1).limit(6).orderBy('ID', 'desc');
 	},
 	async hot(knex) {
-		return knex.select({
-			id: 'ID',
-			title: 'title'
-		}).from('Article').where('type', 1).limit(6).orderBy('ID', 'desc');
+		return knex.select('t.id', 't.title').from(
+			knex.select({
+				id: 'ID',
+				title: 'title',
+				see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
+			}).from('Article as at')
+				.where('type', 1).as('t')
+		)
+			.orderBy('t.see', 'desc')
+			.limit(6)
 	},
 	async log(knex) {
 		return await knex.select({
