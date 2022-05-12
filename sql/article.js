@@ -93,6 +93,6 @@ module.exports = {
 			createTime: 'createTime',
 			address: 'address',
 			type: 'type',
-		}).from('Article').where('type', 2).orderBy('CreateTime', 'desc')
+		}).from('Article').where('type', 2).orderBy('CreateTime', 'asc')
 	}
 }
