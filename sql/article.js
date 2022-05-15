@@ -1,17 +1,26 @@
 module.exports = {
-	async add(knex, {title, content, createTime, address, type, tags, USER_ADDRESS, USER_LNG, USER_LAT}) {
-		await knex('Article').insert({
-			Title: title,
-			Content: content,
-			CreateTime: createTime,
-			Address: USER_ADDRESS,
-			lng: USER_LNG,
-			lat: USER_LAT,
-			Type: type,
-			Tag: tags,
-			Creator: 1,
-		})
-		return []
+	async add(knex, {articleID, title, content, createTime, address, type, tags, USER_ADDRESS, USER_LNG, USER_LAT}) {
+		if (articleID) {
+			// 有文章ID则更新
+			await knex('Article').update({
+				Title: title,
+				Content: content,
+				CreateTime: createTime,
+				// Tag: tags,
+			}).where('ID', articleID)
+		} else {
+			await knex('Article').insert({
+				Title: title,
+				Content: content,
+				CreateTime: createTime,
+				Address: USER_ADDRESS,
+				lng: USER_LNG,
+				lat: USER_LAT,
+				Type: type,
+				Tag: tags,
+				Creator: 1,
+			})
+		}
 	},
 	async getTag(knex) {
 		const tagsList = await knex('Article').distinct('tag').whereNotNull('tag')
@@ -51,6 +60,7 @@ module.exports = {
 			content: 'content',
 			createTime: 'createTime',
 			address: 'address',
+			tags: 'tag',
 			type: 'type',
 			see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
 		}).from('Article as at').where('ID', ID)
@@ -94,5 +104,8 @@ module.exports = {
 			address: 'address',
 			type: 'type',
 		}).from('Article').where('type', 2).orderBy('CreateTime', 'asc')
+	},
+	async delArticle (knex, { articleID }) {
+		await knex('Article').where('id', articleID).del()
 	}
 }
