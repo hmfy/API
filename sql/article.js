@@ -23,7 +23,7 @@ module.exports = {
 		}
 	},
 	async getTag(knex) {
-		const tagsList = await knex('Article').distinct('tag').whereNotNull('tag')
+		const tagsList = await knex('Article').where('type', 1).distinct('tag').whereNotNull('tag')
 		if (tagsList.length) {
 			const tagList = tagsList.reduce((prev, { tag: tags }) => {
 				return prev.concat(tags.split(','))
@@ -52,8 +52,8 @@ module.exports = {
 		}
 	},
 	async detail(knex, {ID}) {
-		const prevInfo = knex.select('title', 'ID').from('Article').where('ID', '>', ID).orderBy('ID', 'asc').limit(1)
-		const nextInfo = knex.select('title', 'ID').from('Article').where('ID', '<', ID).orderBy('ID', 'desc').limit(1)
+		const prevInfo = knex.select('title', 'ID').from('Article').where('ID', '>', ID).where('type', 1).orderBy('ID', 'asc').limit(1)
+		const nextInfo = knex.select('title', 'ID').from('Article').where('ID', '<', ID).where('type', 1).orderBy('ID', 'desc').limit(1)
 		const curInfo = knex.select({
 			id: 'ID',
 			title: 'title',
@@ -63,7 +63,7 @@ module.exports = {
 			tags: 'tag',
 			type: 'type',
 			see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
-		}).from('Article as at').where('ID', ID)
+		}).from('Article as at').where('ID', ID).where('type', 1)
 		const [ prevRes, curRes, nextRes ] = await Promise.all([prevInfo, curInfo, nextInfo])
 		return curRes.map(ele => {
 			const { title: prevTitle = '', ID: prevID = 0 } = prevRes.length ? prevRes[0] : []
