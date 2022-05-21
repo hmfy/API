@@ -15,7 +15,7 @@ const uploadConfig = multer({
 
 /* GET file page. */
 router.get('/', (req, res) => res.send('file interface!'))
-router.post('/upload', uploadConfig.array('photos', 6), (req, res) => {
+router.post('/upload', uploadConfig.array('files', 99), (req, res) => {
 	res.send({
 		list: req.files.map(ele => ({path: '/files/' + ele.filename}))
 	})
