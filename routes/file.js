@@ -1,5 +1,5 @@
 const express = require('express')
-const fs = require('fs')
+const { uuid } = require('../utils/tools')
 const path = require('path')
 const multer = require('multer')
 const compress = require(path.resolve(__dirname, '../utils/compression'))
@@ -8,14 +8,18 @@ const uploadConfig = multer({
 	storage: multer.diskStorage({
 		destination: path.resolve(__dirname, '../files/files/'),
 		filename (req, file, save) {
-			save(null, file.originalname)
+			save(null, uuid() + '.' + file.originalname.split('.').slice(-1))
 		}
 	})
 })
 
-/* GET home page. */
-router.get('/', (req, res) => res.send('file home!'))
-router.post('/upload', (req, res) => { res.send('upload') })
+/* GET file page. */
+router.get('/', (req, res) => res.send('file interface!'))
+router.post('/upload', uploadConfig.array('photos', 6), (req, res) => {
+	res.send({
+		list: req.files.map(ele => ({path: '/files/' + ele.filename}))
+	})
+})
 router.post('/zip2', uploadConfig.array('photos', 6), (req, res) => {
 	const needSize = req.body['compressVal'] || 400 * 1024
 	req.files.forEach(({ filename, size, path } ) => {

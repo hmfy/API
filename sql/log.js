@@ -10,6 +10,10 @@ module.exports = {
 		})
 	},
 	async ip2address (knex, { USER_IP, articleID, lessTime = 24 * 60 * 60 * 1000 }) {
+		if (!USER_IP) return {
+			expires: true,
+			info: null
+		}
 		const res = await knex.select('createTime', 'address', 'lng', 'lat').from('ReadHistory')
 			.where('IP', USER_IP)
 			.where(builder => {
