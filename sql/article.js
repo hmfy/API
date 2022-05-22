@@ -63,7 +63,7 @@ module.exports = {
 			tags: 'tag',
 			type: 'type',
 			see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
-		}).from('Article as at').where('ID', ID).where('type', 1)
+		}).from('Article as at').where('ID', ID)
 		const [ prevRes, curRes, nextRes ] = await Promise.all([prevInfo, curInfo, nextInfo])
 		return curRes.map(ele => {
 			const { title: prevTitle = '', ID: prevID = 0 } = prevRes.length ? prevRes[0] : []
