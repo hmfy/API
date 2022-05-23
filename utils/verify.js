@@ -20,10 +20,13 @@ module.exports = {
 		return rsa.decrypt(str, 'utf8')
 	},
 	setToken (ID) {
-		return jwt.sign(
-			{ ID },
-			token.signKey,
-			{ expiresIn: token.signTime }
-		)
+		return {
+			token: jwt.sign(
+				{ID},
+				token.signKey,
+				{expiresIn: token.signTime}
+			),
+			expiresTime: token.signTime
+		}
 	}
 }

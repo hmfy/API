@@ -14,10 +14,12 @@ router.post('/login', async (req, res) => {
 		const { password: truePaw, ID } = result[0]
 		if (truePaw === password) {
 			// 密码正确
+			const { token, expiresTime } = setToken(ID)
 			return res.send({
 				err: null,
 				msg: '登陆成功！',
-				token: setToken(ID)
+				token,
+				expiresTime,
 			})
 		}
 	}
