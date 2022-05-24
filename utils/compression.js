@@ -3,6 +3,7 @@ const path = require("path")
 const fs = require("fs")
 
 const ZIP_PATH = path.resolve(__dirname, `../files/zip`)
+// 超过2mb或3mb将崩溃
 const compress = ({ imgPath, name, needSize, scale, quality, backupQuality }) => {
 	const imgInfo = images(imgPath)
 	const { width, height } = imgInfo.size()
@@ -34,5 +35,6 @@ const compress = ({ imgPath, name, needSize, scale, quality, backupQuality }) =>
 			})
 		}
 	}
+
 }
 module.exports = compress

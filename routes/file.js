@@ -13,16 +13,8 @@ const uploadConfig = multer({
 	})
 })
 
-/* GET file page. */
-router.get('/', (req, res) => res.send('file interface!'))
-router.post('/upload', uploadConfig.array('files', 99), (req, res) => {
-	res.send({
-		list: req.files.map(ele => ({path: '/files/' + ele.filename}))
-	})
-})
-router.post('/zip2', uploadConfig.array('photos', 6), (req, res) => {
-	const needSize = req.body['compressVal'] || 400 * 1024
-	req.files.forEach(({ filename, size, path } ) => {
+function compressFileList (fileList, needSize) {
+	fileList.forEach(({ filename, size, path } ) => {
 		if (needSize > size) return // 不需要压缩
 		let scale = Math.sqrt(needSize / size)
 		let backupQuality = Math.floor(needSize / size * 100) + 5
@@ -35,6 +27,21 @@ router.post('/zip2', uploadConfig.array('photos', 6), (req, res) => {
 			needSize
 		})
 	})
+}
+/* GET file page. */
+router.get('/', (req, res) => res.send('file interface!'))
+router.post('/upload', uploadConfig.array('files', 99), async (req, res) => {
+	// 每份文件都要压缩
+	const needSize = 300 * 1024
+	compressFileList(req.files, needSize)
+
+	res.send({
+		list: req.files.map(ele => ({path: '/zip/' + ele.filename}))
+	})
+})
+router.post('/zip2', uploadConfig.array('photos', 6), async (req, res) => {
+	const needSize = req.body['compressVal'] || 400 * 1024
+	await compressFileList(req.files, needSize)
 	res.send(req.files)
 })
 router.get('/download2', ({ query }, res) => {
