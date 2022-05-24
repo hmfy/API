@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 module.exports = {
 	parseResult(result = {}, args = {}) {
 		const {url = ''} = args
@@ -39,7 +41,6 @@ module.exports = {
 		const [IP = ''] = ip.split(',')
 		return IP.substr(IP.lastIndexOf(':') + 1, IP.length);
 	},
-
 	uuid() {
 		const s = [];
 		const hexDigits = "0123456789abcdef";
