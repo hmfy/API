@@ -1,6 +1,6 @@
 const app = require('../app')
 const debug = require('debug')('api:server')
-const https = require('https')
+const http2 = require('spdy')
 const fs = require('fs')
 
 // 端口号
@@ -11,7 +11,7 @@ app.set('port', port)
 const privateKey = fs.readFileSync('/project/API/ssl/fyang.fun.key', 'utf8')
 const certificate = fs.readFileSync('/project/API/ssl/fyang.fun_bundle.crt', 'utf8')
 const credentials = { key: privateKey, cert: certificate }
-const server = https.createServer(credentials, app)
+const server = http2.createServer(credentials, app)
 
 // 监听
 server.listen(port);
