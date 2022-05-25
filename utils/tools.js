@@ -11,11 +11,13 @@ module.exports = {
 
 			if (url.includes('/execute')) {
 				return {
+					code: 200,
 					list: list,
 					err: null
 				}
 			} else if (url.includes('/pageQuery')) {
 				return {
+					code: 200,
 					pageSize: pageSize,
 					pageNo: pageNo,
 					total: total || list.length,
@@ -26,13 +28,16 @@ module.exports = {
 				return result
 			} else {
 				return {
+					code: 200,
 					list: [],
 					err: `无效的url ${url}`
 				}
 			}
 		} else {
 			return {
-				list: result, err: null
+				code: 200,
+				list: result,
+				err: null
 			}
 		}
 	},
