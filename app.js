@@ -3,16 +3,18 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const {expressjwt} = require('express-jwt')
-
 const {token} = require('./config/config')
+
+// require route
 const indexRoute = require('./routes/index')
 const loginRoute = require('./routes/login')
 const userRoute = require('./routes/user')
 const fileRoute = require('./routes/file')
 const {getAddress} = require("./utils/address");
 
-// until
+// init app
 const app = express()
+
 
 app.use(logger('dev'))
 app.use(express.json({limit: '100mb'}))
