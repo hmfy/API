@@ -4,7 +4,7 @@ const http2 = require('spdy')
 const fs = require('fs')
 
 // 端口号
-const port = normalizePort(process.env.PORT || '3001')
+const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
 // 服务
