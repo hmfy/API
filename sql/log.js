@@ -36,7 +36,7 @@ module.exports = {
 					ip: USER_IP,
 					lng: lng,
 					lat: lat,
-					address: address
+					address: address || '中国'
 				}
 			}
 		} else {

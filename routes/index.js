@@ -3,13 +3,14 @@ const execute = require('../utils/knex-parse')
 const router = express.Router()
 
 async function request (req, res) {
-	const { USER_IP, USER_LNG, USER_LAT, USER_ADDRESS } = req
+	const { USER_IP, USER_LNG, USER_LAT, USER_ADDRESS, USER_ID } = req
 	const result = await execute({
 		...req.body,
 		url: req.url,
 		USER_IP,
 		USER_LNG,
 		USER_LAT,
+		USER_ID,
 		USER_ADDRESS
 	})
 	res.send(result)

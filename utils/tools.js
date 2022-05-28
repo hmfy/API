@@ -1,5 +1,4 @@
-const fs = require('fs')
-
+const client = require('../redis')
 module.exports = {
 	parseResult(result = {}, args = {}) {
 		const {url = ''} = args
