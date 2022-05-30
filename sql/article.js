@@ -1,5 +1,15 @@
+function openWhere (builder, USER_ID) {
+	return (builder) => {
+		if (USER_ID) {
+			builder.where('creator', USER_ID).orWhere('open', 1)
+		} else {
+			builder.where('open', 1)
+		}
+	}
+}
+
 module.exports = {
-	async add(knex, {articleID, title, content, createTime, type, tags, USER_ADDRESS, USER_LNG, USER_LAT, USER_ID}) {
+	async add(knex, {articleID, title, content, open, createTime, type, tags, USER_ADDRESS, USER_LNG, USER_LAT, USER_ID}) {
 		if (articleID) {
 			// 有文章ID则更新
 			await knex('Article').update({
@@ -18,6 +28,7 @@ module.exports = {
 				lat: USER_LAT,
 				Type: type,
 				Tag: tags,
+				open: open,
 				Creator: USER_ID,
 			})
 		}
@@ -25,13 +36,7 @@ module.exports = {
 	async getTag(knex, {USER_ID}) {
 		const tagsList = await knex('Article').where('type', 1)
 			.distinct('tag').whereNotNull('tag')
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			})
+			.where('creator', USER_ID)
 		if (tagsList.length) {
 			const tagList = tagsList.reduce((prev, { tag: tags }) => {
 				return prev.concat(tags.split(','))
@@ -53,13 +58,7 @@ module.exports = {
 			.limit(pageSize)
 			.offset((pageNo - 1) * pageSize)
 			.where('type', 1)
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			})
+			.where(openWhere(knex, USER_ID))
 			.orderBy('ID', 'desc')
 		return {
 			total: total,
@@ -69,23 +68,11 @@ module.exports = {
 	async detail(knex, {ID, USER_ID}) {
 		const prevInfo = knex.select('title', 'ID').from('Article')
 			.where('ID', '>', ID).where('type', 1)
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			})
+			.where(openWhere(knex, USER_ID))
 			.orderBy('ID', 'asc').limit(1)
 		const nextInfo = knex.select('title', 'ID').from('Article')
 			.where('ID', '<', ID).where('type', 1)
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			})
+			.where(openWhere(knex, USER_ID))
 			.orderBy('ID', 'desc').limit(1)
 		const curInfo = knex.select({
 			id: 'ID',
@@ -115,13 +102,7 @@ module.exports = {
 			id: 'ID',
 			title: 'title'
 		}).from('Article').where('type', 1)
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			})
+			.where(openWhere(knex, USER_ID))
 			.limit(6).orderBy('ID', 'desc');
 	},
 	async hot(knex, {USER_ID}) {
@@ -133,13 +114,7 @@ module.exports = {
 				open: 'open',
 				see: knex('ReadHistory as rh').where('rh.ArticleID', knex.ref('at.ID')).count('*')
 			}).from('Article as at')
-				.where(builder => {
-					if (USER_ID) {
-						builder.where('creator', USER_ID)
-					} else {
-						builder.where('open', 1) // 只开发我写的
-					}
-				})
+				.where(openWhere(knex, USER_ID))
 				.where('type', 1).as('t')
 		)
 			.orderBy('t.see', 'desc')
@@ -154,19 +129,9 @@ module.exports = {
 			address: 'address',
 			type: 'type',
 		}).from('Article').where('type', 2)
-			.where(builder => {
-				if (USER_ID) {
-					builder.where('creator', USER_ID)
-				} else {
-					builder.where('open', 1) // 只开发我写的
-				}
-			}).orderBy('CreateTime', 'asc')
+			.where(openWhere(knex, USER_ID)).orderBy('CreateTime', 'asc')
 	},
 	async delArticle (knex, { articleID, USER_ID }) {
-		await knex('Article').where('id', articleID).where(builder => {
-			if (USER_ID) {
-				builder.where('creator', USER_ID)
-			}
-		}).del()
+		await knex('Article').where('id', articleID).where('creator', USER_ID).del()
 	}
 }

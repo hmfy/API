@@ -27,9 +27,8 @@ router.post('/login', async (req, res) => {
 				code: 200,
 				err: null,
 				msg: '登陆成功！',
-				token,
-				expiresTime,
-				name
+				tokenInfo: { token, expiresTime },
+				userInfo: { name, ID }
 			})
 		}
 	}
