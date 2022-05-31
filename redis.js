@@ -8,12 +8,12 @@ client.connect();
 
 module.exports = {
     client,
-    async setUserInfo ({ userID, token, expiresTime }) {
+    async setUserInfo ({ userID, token, expires }) {
         await client.set(String(userID), token, {
-            EX: expiresTime
+            EX: expires
         }) // 标记 token 的所属用户，方便通过 userID 直接下线某一用户
         await client.set(token, userID, {
-            EX: expiresTime
+            EX: expires
         })
     },
     async getUserInfo (token = '') {

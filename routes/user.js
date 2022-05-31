@@ -16,19 +16,18 @@ router.post('/login', async (req, res) => {
 		const { password: truePaw, ID, name } = result[0]
 		if (truePaw === password) {
 			// 密码正确
-			const { token, expiresTime } = setToken(ID)
+			const { token, expires } = setToken(ID)
 			// 保存登录信息
 			await setUserInfo({
 				userID: ID,
 				token,
-				expiresTime
+				expires
 			})
 			return res.send({
 				code: 200,
 				err: null,
 				msg: '登陆成功！',
-				tokenInfo: { token, expiresTime },
-				userInfo: { name, ID }
+				userInfo: { name, ID, token, expires }
 			})
 		}
 	}

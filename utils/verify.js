@@ -26,7 +26,7 @@ module.exports = {
 				token.signKey,
 				{expiresIn: token.signTime}
 			),
-			expiresTime: token.signTime
+			expires: token.signTime
 		}
 	}
 }
